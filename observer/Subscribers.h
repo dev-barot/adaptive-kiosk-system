@@ -36,11 +36,33 @@ public:
  * Pattern: Observer (Concrete Observer)
  * Subscribes to: "EmergencyModeActivated", "HardwareFailureEvent", "TransactionCompleted"
  */
+#include <fstream>
+#include <ctime>
+
 class CityMonitoringCenter : public ISubscriber
 {
+    const string logFile = "data/monitoring_audit.log";
+
+    void logToFile(const string &eventType, const string &payload)
+    {
+        ofstream file(logFile, ios::app);
+        if (file.is_open())
+        {
+            time_t now = time(0);
+            char *dt = ctime(&now);
+            string timestamp(dt);
+            timestamp.pop_back(); // remove newline
+
+            file << "[" << timestamp << "] [" << eventType << "] " << payload << endl;
+            file.close();
+        }
+    }
+
 public:
     void onEvent(const string &eventType, const string &payload) override
     {
+        logToFile(eventType, payload);
+
         if (eventType == "EmergencyModeActivated")
             cout << "  [CityMonitor] EMERGENCY ALERT received: " << payload
                  << " - dispatching response team." << endl;
