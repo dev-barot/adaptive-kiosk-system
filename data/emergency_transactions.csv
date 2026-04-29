@@ -1,0 +1,116 @@
+timestamp,transaction_id,operation,status,item_id,quantity,amount,payment_method,phase,reason,details
+2026-04-27 18:39:20,N/A,TransactionManager,INFO,,0,0.00,,,,Purchase requested -> TXN-3 Item: water Qty: 2 Payment: UPI
+2026-04-27 18:39:20,TXN-3,Purchase,STARTED,water,2,0.00,UPI,REQUESTED,,Purchase request accepted by facade
+2026-04-27 18:39:20,TXN-3,Purchase,PASSED,water,2,0.00,UPI,VALIDATED,,All static and derived constraints passed
+2026-04-27 18:39:20,N/A,TransactionManager,INFO,,0,0.00,,,,Snapshot saved before payment and dispense -> Item: water
+2026-04-27 18:39:20,TXN-3,Purchase,SAVED,water,2,0.00,UPI,SNAPSHOT_SAVED,,Rollback point captured
+2026-04-27 18:39:20,TXN-3,Purchase,PASSED,water,2,100.00,UPI,RESERVED,,Stock reserved atomically
+2026-04-27 18:39:20,TXN-3,Purchase,PASSED,water,2,100.00,UPI,PAYMENT_CONFIRMED,,Payment adapter approved charge
+2026-04-27 18:39:20,TXN-3,Purchase,SUCCESS,water,2,100.00,UPI,COMMITTED,,Inventory reduced and transaction completed atomically
+2026-04-27 18:39:21,N/A,TransactionManager,INFO,,0,0.00,,,,Purchase completed -> SUCCESS | Item: water
+2026-04-27 18:39:21,N/A,TransactionManager,INFO,,0,0.00,,,,Purchase requested -> TXN-4 Item: food Qty: 2 Payment: CARD
+2026-04-27 18:39:21,TXN-4,Purchase,STARTED,food,2,0.00,CARD,REQUESTED,,Purchase request accepted by facade
+2026-04-27 18:39:21,TXN-4,Purchase,PASSED,food,2,0.00,CARD,VALIDATED,,All static and derived constraints passed
+2026-04-27 18:39:21,N/A,TransactionManager,INFO,,0,0.00,,,,Snapshot saved before payment and dispense -> Item: food
+2026-04-27 18:39:21,TXN-4,Purchase,SAVED,food,2,0.00,CARD,SNAPSHOT_SAVED,,Rollback point captured
+2026-04-27 18:39:21,TXN-4,Purchase,PASSED,food,2,176.00,CARD,RESERVED,,Stock reserved atomically
+2026-04-27 18:39:21,TXN-4,Purchase,PASSED,food,2,176.00,CARD,PAYMENT_CONFIRMED,,Payment adapter approved charge
+2026-04-27 18:39:21,TXN-4,Purchase,SUCCESS,food,2,176.00,CARD,COMMITTED,,Inventory reduced and transaction completed atomically
+2026-04-27 18:39:21,N/A,TransactionManager,INFO,,0,0.00,,,,Purchase completed -> SUCCESS | Item: food
+2026-04-27 18:39:21,N/A,TransactionManager,INFO,,0,0.00,,,,Purchase requested -> TXN-5 Item: medkit Qty: 1 Payment: WALLET
+2026-04-27 18:39:21,TXN-5,Purchase,STARTED,medkit,1,0.00,WALLET,REQUESTED,,Purchase request accepted by facade
+2026-04-27 18:39:21,TXN-5,Purchase,PASSED,medkit,1,0.00,WALLET,VALIDATED,,All static and derived constraints passed
+2026-04-27 18:39:21,N/A,TransactionManager,INFO,,0,0.00,,,,Snapshot saved before payment and dispense -> Item: medkit
+2026-04-27 18:39:21,TXN-5,Purchase,SAVED,medkit,1,0.00,WALLET,SNAPSHOT_SAVED,,Rollback point captured
+2026-04-27 18:39:21,TXN-5,Purchase,PASSED,medkit,1,90.00,WALLET,RESERVED,,Stock reserved atomically
+2026-04-27 18:39:21,TXN-5,Purchase,PASSED,medkit,1,90.00,WALLET,PAYMENT_CONFIRMED,,Payment adapter approved charge
+2026-04-27 18:39:21,TXN-5,Purchase,SUCCESS,medkit,1,90.00,WALLET,COMMITTED,,Inventory reduced and transaction completed atomically
+2026-04-27 18:39:21,N/A,TransactionManager,INFO,,0,0.00,,,,Purchase completed -> SUCCESS | Item: medkit
+2026-04-27 18:39:21,N/A,TransactionManager,INFO,,0,0.00,,,,Purchase requested -> TXN-6 Item: food Qty: 3 Payment: UPI
+2026-04-27 18:39:21,TXN-6,Purchase,STARTED,food,3,0.00,UPI,REQUESTED,,Purchase request accepted by facade
+2026-04-27 18:39:21,TXN-6,Purchase,PASSED,food,3,0.00,UPI,VALIDATED,,All static and derived constraints passed
+2026-04-27 18:39:21,N/A,TransactionManager,INFO,,0,0.00,,,,Snapshot saved before payment and dispense -> Item: food
+2026-04-27 18:39:21,TXN-6,Purchase,SAVED,food,3,0.00,UPI,SNAPSHOT_SAVED,,Rollback point captured
+2026-04-27 18:39:21,TXN-6,Purchase,FAILED,food,3,0.00,UPI,RESERVATION_FAILED,State or stock restriction,Reservation was not created
+2026-04-27 18:39:21,N/A,TransactionManager,INFO,,0,0.00,,,,Purchase rejected by kiosk core -> Item: food
+2026-04-27 18:39:21,N/A,TransactionManager,INFO,,0,0.00,,,,Purchase requested -> TXN-7 Item: battery Qty: 2 Payment: CARD
+2026-04-27 18:39:22,TXN-7,Purchase,STARTED,battery,2,0.00,CARD,REQUESTED,,Purchase request accepted by facade
+2026-04-27 18:39:22,TXN-7,Purchase,PASSED,battery,2,0.00,CARD,VALIDATED,,All static and derived constraints passed
+2026-04-27 18:39:22,N/A,TransactionManager,INFO,,0,0.00,,,,Snapshot saved before payment and dispense -> Item: battery
+2026-04-27 18:39:22,TXN-7,Purchase,SAVED,battery,2,0.00,CARD,SNAPSHOT_SAVED,,Rollback point captured
+2026-04-27 18:39:22,TXN-7,Purchase,PASSED,battery,2,75.00,CARD,RESERVED,,Stock reserved atomically
+2026-04-27 18:39:22,TXN-7,Purchase,PASSED,battery,2,75.00,CARD,PAYMENT_CONFIRMED,,Payment adapter approved charge
+2026-04-27 18:39:22,TXN-7,Purchase,SUCCESS,battery,2,75.00,CARD,COMMITTED,,Inventory reduced and transaction completed atomically
+2026-04-27 18:39:22,N/A,TransactionManager,INFO,,0,0.00,,,,Purchase completed -> SUCCESS | Item: battery
+2026-04-27 18:39:22,N/A,TransactionManager,INFO,,0,0.00,,,,Purchase requested -> TXN-8 Item: water Qty: 1 Payment: CARD
+2026-04-27 18:39:22,TXN-8,Purchase,STARTED,water,1,0.00,CARD,REQUESTED,,Purchase request accepted by facade
+2026-04-27 18:39:22,TXN-8,Purchase,PASSED,water,1,0.00,CARD,VALIDATED,,All static and derived constraints passed
+2026-04-27 18:39:22,N/A,TransactionManager,INFO,,0,0.00,,,,Snapshot saved before payment and dispense -> Item: water
+2026-04-27 18:39:22,TXN-8,Purchase,SAVED,water,1,0.00,CARD,SNAPSHOT_SAVED,,Rollback point captured
+2026-04-27 18:39:22,TXN-8,Purchase,PASSED,water,1,25.00,CARD,RESERVED,,Stock reserved atomically
+2026-04-27 18:39:22,TXN-8,Purchase,PASSED,water,1,25.00,CARD,PAYMENT_CONFIRMED,,Payment adapter approved charge
+2026-04-27 18:39:22,TXN-8,Purchase,FAILED,water,1,25.00,CARD,DISPENSE_FAILED,RECOVERABLE,Recovery chain started
+2026-04-27 18:39:22,TXN-8,Purchase,RECOVERED,water,1,25.00,CARD,RECOVERY_COMPLETE,,Recovery chain completed before commit
+2026-04-27 18:39:22,N/A,TransactionManager,INFO,,0,0.00,,,,Hardware recovery succeeded -> Item: water
+2026-04-27 18:39:22,TXN-8,Purchase,SUCCESS,water,1,25.00,CARD,COMMITTED,,Inventory reduced and transaction completed atomically
+2026-04-27 18:39:22,N/A,TransactionManager,INFO,,0,0.00,,,,Purchase completed -> SUCCESS | Item: water
+2026-04-27 18:39:22,N/A,TransactionManager,INFO,,0,0.00,,,,Purchase requested -> TXN-9 Item: water Qty: 1 Payment: CARD
+2026-04-27 18:39:22,TXN-9,Purchase,STARTED,water,1,0.00,CARD,REQUESTED,,Purchase request accepted by facade
+2026-04-27 18:39:22,TXN-9,Purchase,PASSED,water,1,0.00,CARD,VALIDATED,,All static and derived constraints passed
+2026-04-27 18:39:22,N/A,TransactionManager,INFO,,0,0.00,,,,Snapshot saved before payment and dispense -> Item: water
+2026-04-27 18:39:22,TXN-9,Purchase,SAVED,water,1,0.00,CARD,SNAPSHOT_SAVED,,Rollback point captured
+2026-04-27 18:39:22,TXN-9,Purchase,PASSED,water,1,25.00,CARD,RESERVED,,Stock reserved atomically
+2026-04-27 18:39:22,TXN-9,Purchase,PASSED,water,1,25.00,CARD,PAYMENT_CONFIRMED,,Payment adapter approved charge
+2026-04-27 18:39:24,TXN-9,Purchase,FAILED,water,1,25.00,CARD,DISPENSE_FAILED,NONE,Recovery chain started
+2026-04-27 18:39:24,N/A,TransactionManager,INFO,,0,0.00,,,,Snapshot restored -> Item: water
+2026-04-27 18:39:24,TXN-9,Purchase,ROLLED_BACK,water,1,25.00,CARD,ROLLBACK_COMPLETE,Unrecoverable hardware failure,Payment refunded; reservation and snapshot restored
+2026-04-27 18:39:24,N/A,TransactionManager,INFO,,0,0.00,,,,Purchase rolled back after unrecoverable hardware failure -> Item: water
+2026-04-27 18:39:24,N/A,TransactionManager,INFO,,0,0.00,,,,Purchase requested -> TXN-10 Item: battery Qty: 1 Payment: WALLET
+2026-04-27 18:39:24,TXN-10,Purchase,STARTED,battery,1,0.00,WALLET,REQUESTED,,Purchase request accepted by facade
+2026-04-27 18:39:24,TXN-10,Purchase,PASSED,battery,1,0.00,WALLET,VALIDATED,,All static and derived constraints passed
+2026-04-27 18:39:24,N/A,TransactionManager,INFO,,0,0.00,,,,Snapshot saved before payment and dispense -> Item: battery
+2026-04-27 18:39:24,TXN-10,Purchase,SAVED,battery,1,0.00,WALLET,SNAPSHOT_SAVED,,Rollback point captured
+2026-04-27 18:39:24,TXN-10,Purchase,PASSED,battery,1,37.50,WALLET,RESERVED,,Stock reserved atomically
+2026-04-27 18:39:24,TXN-10,Purchase,PASSED,battery,1,37.50,WALLET,PAYMENT_CONFIRMED,,Payment adapter approved charge
+2026-04-27 18:39:24,TXN-10,Purchase,FAILED,battery,1,37.50,WALLET,DISPENSE_FAILED,FATAL,Recovery chain started
+2026-04-27 18:39:24,N/A,TransactionManager,INFO,,0,0.00,,,,Snapshot restored -> Item: battery
+2026-04-27 18:39:25,TXN-10,Purchase,ROLLED_BACK,battery,1,37.50,WALLET,ROLLBACK_COMPLETE,Unrecoverable hardware failure,Payment refunded; reservation and snapshot restored
+2026-04-27 18:39:25,N/A,TransactionManager,INFO,,0,0.00,,,,Purchase rolled back after unrecoverable hardware failure -> Item: battery
+2026-04-27 18:39:25,N/A,TransactionManager,INFO,,0,0.00,,,,Purchase requested -> TXN-11 Item: food Qty: 1 Payment: UPI
+2026-04-27 18:39:25,TXN-11,Purchase,STARTED,food,1,0.00,UPI,REQUESTED,,Purchase request accepted by facade
+2026-04-27 18:39:25,TXN-11,Purchase,PASSED,food,1,0.00,UPI,VALIDATED,,All static and derived constraints passed
+2026-04-27 18:39:25,N/A,TransactionManager,INFO,,0,0.00,,,,Snapshot saved before payment and dispense -> Item: food
+2026-04-27 18:39:25,TXN-11,Purchase,SAVED,food,1,0.00,UPI,SNAPSHOT_SAVED,,Rollback point captured
+2026-04-27 18:39:25,TXN-11,Purchase,PASSED,food,1,55.00,UPI,RESERVED,,Stock reserved atomically
+2026-04-27 18:39:25,N/A,TransactionManager,INFO,,0,0.00,,,,Snapshot restored -> Item: food
+2026-04-27 18:39:25,TXN-11,Purchase,ROLLED_BACK,food,1,55.00,UPI,PAYMENT_FAILED,Payment provider failure,Reservation released and snapshot restored
+2026-04-27 18:39:25,N/A,TransactionManager,INFO,,0,0.00,,,,Purchase rolled back after payment failure -> Item: food
+2026-04-27 18:39:25,N/A,TransactionManager,INFO,,0,0.00,,,,Purchase requested -> TXN-12 Item: battery Qty: 2 Payment: CARD
+2026-04-27 18:39:25,N/A,TransactionManager,INFO,,0,0.00,,,,Purchase requested -> TXN-13 Item: battery Qty: 2 Payment: CARD
+2026-04-27 18:39:25,TXN-12,Purchase,STARTED,battery,2,0.00,CARD,REQUESTED,,Purchase request accepted by facade
+2026-04-27 18:39:25,TXN-13,Purchase,STARTED,battery,2,0.00,CARD,REQUESTED,,Purchase request accepted by facade
+2026-04-27 18:39:25,TXN-12,Purchase,PASSED,battery,2,0.00,CARD,VALIDATED,,All static and derived constraints passed
+2026-04-27 18:39:25,TXN-13,Purchase,PASSED,battery,2,0.00,CARD,VALIDATED,,All static and derived constraints passed
+2026-04-27 18:39:25,N/A,TransactionManager,INFO,,0,0.00,,,,Snapshot saved before payment and dispense -> Item: battery
+2026-04-27 18:39:25,N/A,TransactionManager,INFO,,0,0.00,,,,Snapshot saved before payment and dispense -> Item: battery
+2026-04-27 18:39:25,TXN-12,Purchase,SAVED,battery,2,0.00,CARD,SNAPSHOT_SAVED,,Rollback point captured
+2026-04-27 18:39:25,TXN-12,Purchase,PASSED,battery,2,75.00,CARD,RESERVED,,Stock reserved atomically
+2026-04-27 18:39:25,TXN-13,Purchase,SAVED,battery,2,0.00,CARD,SNAPSHOT_SAVED,,Rollback point captured
+2026-04-27 18:39:25,TXN-12,Purchase,PASSED,battery,2,75.00,CARD,PAYMENT_CONFIRMED,,Payment adapter approved charge
+2026-04-27 18:39:25,TXN-13,Purchase,FAILED,battery,2,0.00,CARD,RESERVATION_FAILED,State or stock restriction,Reservation was not created
+2026-04-27 18:39:25,N/A,TransactionManager,INFO,,0,0.00,,,,Purchase rejected by kiosk core -> Item: battery
+2026-04-27 18:39:25,TXN-12,Purchase,SUCCESS,battery,2,75.00,CARD,COMMITTED,,Inventory reduced and transaction completed atomically
+2026-04-27 18:39:25,N/A,TransactionManager,INFO,,0,0.00,,,,Purchase completed -> SUCCESS | Item: battery
+2026-04-27 18:39:25,N/A,TransactionManager,INFO,,0,0.00,,,,Purchase requested -> TXN-14 Item: water Qty: 1 Payment: UPI
+2026-04-27 18:39:25,TXN-14,Purchase,STARTED,water,1,0.00,UPI,REQUESTED,,Purchase request accepted by facade
+2026-04-27 18:39:25,TXN-14,Purchase,PASSED,water,1,0.00,UPI,VALIDATED,,All static and derived constraints passed
+2026-04-27 18:39:25,N/A,TransactionManager,INFO,,0,0.00,,,,Snapshot saved before payment and dispense -> Item: water
+2026-04-27 18:39:26,TXN-14,Purchase,SAVED,water,1,0.00,UPI,SNAPSHOT_SAVED,,Rollback point captured
+2026-04-27 18:39:26,TXN-14,Purchase,FAILED,water,1,0.00,UPI,RESERVATION_FAILED,State or stock restriction,Reservation was not created
+2026-04-27 18:39:26,N/A,TransactionManager,INFO,,0,0.00,,,,Purchase rejected by kiosk core -> Item: water
+2026-04-27 18:39:26,N/A,TransactionManager,INFO,,0,0.00,,,,Restock requested -> Item: battery Qty: 3
+2026-04-27 18:39:26,N/A,Restock,SUCCESS,,0,0.00,,,,Item=battery Qty=3
+2026-04-27 18:39:26,N/A,TransactionManager,INFO,,0,0.00,,,,Restock completed -> Item: battery | New stock: 3
+2026-04-27 18:39:26,N/A,TransactionManager,INFO,,0,0.00,,,,Refund requested -> Item: water Qty: 1
+2026-04-27 18:39:26,N/A,Refund,SUCCESS,,0,0.00,,,,Item=water Qty=1
+2026-04-27 18:39:26,N/A,TransactionManager,INFO,,0,0.00,,,,Refund completed -> Item: water | New stock: 10

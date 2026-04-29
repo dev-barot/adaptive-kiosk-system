@@ -1,0 +1,5 @@
+key,value
+emergency_limit,2
+kiosk_version,3.0
+low_stock_threshold,2
+system_mode,MAINTENANCE

@@ -1,0 +1,10 @@
+timestamp,transaction_id,operation,status,item_id,quantity,amount,payment_method,phase,reason,details
+2026-04-27 18:39:20,N/A,TransactionManager,INFO,,0,0.00,,,,Purchase requested -> TXN-1 Item: insulin Qty: 1 Payment: CARD
+2026-04-27 18:39:20,TXN-1,Purchase,STARTED,insulin,1,0.00,CARD,REQUESTED,,Purchase request accepted by facade
+2026-04-27 18:39:20,TXN-1,Purchase,PASSED,insulin,1,0.00,CARD,VALIDATED,,All static and derived constraints passed
+2026-04-27 18:39:20,N/A,TransactionManager,INFO,,0,0.00,,,,Snapshot saved before payment and dispense -> Item: insulin
+2026-04-27 18:39:20,TXN-1,Purchase,SAVED,insulin,1,0.00,CARD,SNAPSHOT_SAVED,,Rollback point captured
+2026-04-27 18:39:20,TXN-1,Purchase,PASSED,insulin,1,340.00,CARD,RESERVED,,Stock reserved atomically
+2026-04-27 18:39:20,TXN-1,Purchase,PASSED,insulin,1,340.00,CARD,PAYMENT_CONFIRMED,,Payment adapter approved charge
+2026-04-27 18:39:20,TXN-1,Purchase,SUCCESS,insulin,1,340.00,CARD,COMMITTED,,Inventory reduced and transaction completed atomically
+2026-04-27 18:39:20,N/A,TransactionManager,INFO,,0,0.00,,,,Purchase completed -> SUCCESS | Item: insulin

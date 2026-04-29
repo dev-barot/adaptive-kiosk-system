@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aura Retail OS | Management Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <p class="eyebrow">Smart Retail Management System</p>
+        <h1>Aura Retail OS</h1>
+      </div>
+      <div class="status-strip">
+        <div class="status-node">
+          <span>Kiosk Identifier</span>
+          <strong id="kioskId">ER-01</strong>
+        </div>
+        <div class="status-node">
+          <span>Current Mode</span>
+          <strong id="modeText">ACTIVE</strong>
+        </div>
+        <div class="status-node">
+          <span>Connectivity</span>
+          <strong id="statusText">ONLINE</strong>
+        </div>
+      </div>
+    </header>
+
+    <nav class="control-band">
+      <button id="normalBtn" class="scenario active">Standard Flow</button>
+      <button id="emergencyBtn" class="scenario">Emergency Protocol</button>
+      <button id="timeoutBtn" class="scenario">Hardware Latency</button>
+      <button id="concurrentBtn" class="scenario">Concurrency Race</button>
+      <button id="resetBtn" class="icon-action" aria-label="Reset System">Reset System</button>
+    </nav>
+
+    <section class="purchase-config">
+      <div class="config-header">
+        <p class="eyebrow">Input Parameters</p>
+        <h2 id="configTitle">Standard Purchase</h2>
+      </div>
+      <fieldset id="purchaseFieldset" class="config-fields">
+        <label>
+          Product Catalog
+          <select id="productSelect">
+            <option value="water">Water (Essential)</option>
+            <option value="food">Ration Pack</option>
+            <option value="medkit">Emergency Medkit</option>
+            <option value="battery">Energy Cell</option>
+          </select>
+        </label>
+        <label>
+          Quantity
+          <input id="quantityInput" type="number" min="1" max="10" value="2">
+        </label>
+        <div class="wallet-readout">
+          <span>Auth Balance</span>
+          <strong id="walletBalance">Rs.1000</strong>
+        </div>
+        <button id="confirmPurchaseBtn" class="confirm-action">Initiate Transaction</button>
+      </fieldset>
+    </section>
+
+    <div class="dashboard-grid">
+      <article class="panel process-panel">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">Transaction Pipeline</p>
+            <h2 id="transactionTitle">TXN-001 | Awaiting Request</h2>
+          </div>
+          <span id="transactionBadge" class="badge">Idle</span>
+        </div>
+
+        <div class="pipeline">
+          <div class="step" data-step="validated">
+            <span>01</span>
+            <strong>Validated</strong>
+          </div>
+          <div class="step" data-step="reserved">
+            <span>02</span>
+            <strong>Reserved</strong>
+          </div>
+          <div class="step" data-step="paid">
+            <span>03</span>
+            <strong>Authorized</strong>
+          </div>
+          <div class="step" data-step="dispensed">
+            <span>04</span>
+            <strong>Dispensed</strong>
+          </div>
+          <div class="step" data-step="committed">
+            <span>05</span>
+            <strong>Committed</strong>
+          </div>
+        </div>
+
+        <div class="kiosk-visual">
+          <div class="kiosk-frame">
+            <div class="screen">
+              <span id="screenMode">ACTIVE</span>
+              <strong id="screenMessage">System Ready</strong>
+            </div>
+            <div class="slots">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+            <div id="dispenseTray" class="tray">
+              <div id="productOutput" class="product-output" aria-hidden="true">
+                <span class="product-icon"></span>
+                <strong id="productOutputLabel">Product</strong>
+              </div>
+            </div>
+          </div>
+          <div class="signal-stack">
+            <div id="paymentSignal" class="signal">Wallet Authorization</div>
+            <div id="hardwareSignal" class="signal">Dispenser Unit</div>
+            <div id="rollbackSignal" class="signal">Memento Rollback</div>
+          </div>
+        </div>
+      </article>
+
+      <aside class="panel inventory-panel">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">Inventory Control</p>
+            <h2>Local Repository</h2>
+          </div>
+          <span id="priceBadge" class="badge">Standard Pricing</span>
+        </div>
+        <div id="inventoryList" class="inventory-list"></div>
+      </aside>
+
+      <article class="panel events-panel">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">System Monitor</p>
+            <h2>Live Operational Events</h2>
+          </div>
+          <span id="eventCount" class="badge">0 Events</span>
+        </div>
+        <div id="eventFeed" class="event-feed"></div>
+      </article>
+
+      <article class="panel audit-panel">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">Transaction Audit</p>
+            <h2>State Transitions</h2>
+          </div>
+          <span id="auditBadge" class="badge">Passive</span>
+        </div>
+        <div id="auditLog" class="audit-log"></div>
+      </article>
+    </div>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
