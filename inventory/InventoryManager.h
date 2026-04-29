@@ -1,6 +1,7 @@
 #pragma once
 #include "ReservationManager.h"
 #include <map>
+#include <mutex>
 #include <string>
 #include <stdexcept>
 using namespace std;
@@ -18,6 +19,7 @@ class InventoryManager
 {
     map<string, int> stock;
     ReservationManager *reservation;
+    mutable mutex stockMutex;
 
 public:
     /**
@@ -30,6 +32,7 @@ public:
     {
         if (qty <= 0)
             throw invalid_argument("addStock: qty must be positive.");
+        lock_guard<mutex> lock(stockMutex);
         stock[id] += qty;
     }
 
@@ -40,10 +43,42 @@ public:
 
     void reduceStock(const string &id, int qty)
     {
+        lock_guard<mutex> lock(stockMutex);
         auto it = stock.find(id);
         if (it == stock.end() || it->second < qty)
             throw runtime_error("reduceStock: Insufficient stock for product '" + id + "'.");
         stock[id] -= qty;
+    }
+
+    int getRawStock(const string &id) const
+    {
+        lock_guard<mutex> lock(stockMutex);
+        auto it = stock.find(id);
+        return (it != stock.end()) ? it->second : 0;
+    }
+
+    void setRawStock(const string &id, int qty)
+    {
+        if (qty < 0)
+            throw invalid_argument("setRawStock: qty cannot be negative.");
+        lock_guard<mutex> lock(stockMutex);
+        stock[id] = qty;
+    }
+
+    bool tryReserveAvailable(const string &id, int qty)
+    {
+        if (qty <= 0)
+            throw invalid_argument("tryReserveAvailable: qty must be positive.");
+
+        lock_guard<mutex> lock(stockMutex);
+        auto it = stock.find(id);
+        int raw = (it != stock.end()) ? it->second : 0;
+        int available = raw - reservation->getReserved(id);
+        if (available < qty)
+            return false;
+
+        reservation->reserve(id, qty);
+        return true;
     }
 
     /**
@@ -52,6 +87,7 @@ public:
      */
     int getDerivedStock(const string &id) const
     {
+        lock_guard<mutex> lock(stockMutex);
         auto it = stock.find(id);
         int raw = (it != stock.end()) ? it->second : 0;
         int res = reservation->getReserved(id);

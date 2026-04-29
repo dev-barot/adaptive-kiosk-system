@@ -1,5 +1,6 @@
 #pragma once
 #include <map>
+#include <mutex>
 #include <string>
 #include <stdexcept>
 using namespace std;
@@ -22,12 +23,14 @@ using namespace std;
 class ReservationManager
 {
     map<string, int> reserved;
+    mutable mutex reservationMutex;
 
 public:
     void reserve(const string &id, int qty)
     {
         if (qty <= 0)
             throw invalid_argument("reserve: qty must be positive.");
+        lock_guard<mutex> lock(reservationMutex);
         reserved[id] += qty;
     }
 
@@ -35,6 +38,7 @@ public:
     {
         if (qty <= 0)
             throw invalid_argument("release: qty must be positive.");
+        lock_guard<mutex> lock(reservationMutex);
         if (reserved[id] < qty)
             throw runtime_error("release: Cannot release " + to_string(qty) +
                                 " units - only " + to_string(reserved[id]) +
@@ -44,7 +48,16 @@ public:
 
     int getReserved(const string &id) const
     {
+        lock_guard<mutex> lock(reservationMutex);
         auto it = reserved.find(id);
         return (it != reserved.end()) ? it->second : 0;
+    }
+
+    void setReserved(const string &id, int qty)
+    {
+        if (qty < 0)
+            throw invalid_argument("setReserved: qty cannot be negative.");
+        lock_guard<mutex> lock(reservationMutex);
+        reserved[id] = qty;
     }
 };
