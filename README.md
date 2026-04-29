@@ -54,6 +54,36 @@ Kiosk health isn't a simple flag; it's a **derived attribute**. The system compu
 
 ---
 
+## 🚀 Simulation Demonstration Walkthrough
+
+To fully evaluate the **Plan A** autonomous capabilities, follow these steps to run the core simulation scenarios.
+
+### 1. Backend CLI Demonstration (C++)
+The C++ simulation runs through 13+ mission-critical scenarios in a single execution.
+
+**Steps**:
+1.  **Compile**: `g++ -std=c++17 main.cpp -o aura.exe`
+2.  **Run**: `./aura.exe`
+3.  **Observe Scenarios**:
+    *   **Scenario A-C**: Watch the system swap pricing strategies (Standard → Discount → Emergency) as it transitions states.
+    *   **Scenario F**: Observe the **Self-Healing Chain**. The system detects a "Recoverable" fault and retries autonomously.
+    *   **Scenario G-H**: Observe **Autonomous Rollback**. When a "Fatal" fault occurs, the system restores inventory and refunds payment instantly using the **Memento Pattern**.
+    *   **Scenario J**: Witness **Concurrent Safety**. Two threads attempt to buy the same stock; the system uses mutex locks to ensure only one succeeds.
+
+### 2. Visual Dashboard Demonstration (Web)
+Visualizes the same logic with a premium interface.
+
+**Steps**:
+1.  Open `frontend/index.html` in Chrome/Edge.
+2.  **Normal Flow**: Click "Normal Purchase" → "Confirm". Watch the green signals indicate a smooth transaction.
+3.  **Emergency Restriction**: Click "Emergency Protocol". Try to buy **Quantity: 5**. Watch the system block the request due to emergency safety limits.
+4.  **The "Wow" Rollback**: Click "Hardware Latency Test" → "Confirm".
+    *   Watch the system authorize payment.
+    *   Wait for the hardware timeout.
+    *   **Observe**: The "Rollback" signal flashes blue, and the stock is restored to its original value.
+
+---
+
 ## 🚀 Getting Started
 
 ### 1. Backend Simulation (C++)
