@@ -75,6 +75,11 @@ public:
         configData[key] = value;
         cout << "[CentralRegistry] Config updated: " << key << " = " << value << endl;
     }
+
+    const map<string, string> &getAllConfig() const
+    {
+        return configData;
+    }
 };
 
 // Static member definition — must be in exactly one translation unit

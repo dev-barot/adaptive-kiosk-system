@@ -1,265 +1,211 @@
-/**
- * =============================================================================
- * AURA RETAIL OS - Subtask 2 Simulation
- * Group 5: Lazy Constructors | PATH A: Adaptive Autonomous System
- * =============================================================================
- *
- * Patterns demonstrated in this simulation:
- *
- *  1. STATE PATTERN       - Kiosk transitions: Active → PowerSaving → Emergency → Maintenance
- *                           Each state enforces its own rules and pricing automatically.
- *
- *  2. OBSERVER PATTERN    - EventManager broadcasts events to InventoryMonitor,
- *                           CityMonitoringCenter, and MaintenanceService.
- *                           Subsystems react independently - zero direct coupling.
- *
- *  3. STRATEGY PATTERN    - IPricingStrategy switches automatically with state.
- *                           Standard (x1.0) → Discount (x0.8) → Emergency (x0.5).
- *
- *  4. COMPOSITE PATTERN   - ProductBundle contains IndividualProducts (and other
- *                           bundles). calculateFinalPrice() recurses transparently.
- *
- *  5. SINGLETON PATTERN   - CentralRegistry: single global config instance,
- *                           verified by calling getInstance() twice.
- *
- * Simulation Scenarios (Path A requirements):
- *   A. Normal purchase in Active mode
- *   B. Mode switch to PowerSaving - discount pricing, qty limit enforced
- *   C. Emergency mode activated - 50% pricing, strict qty cap, event broadcast
- *   D. Over-limit purchase attempt in Emergency mode - denied
- *   E. Out-of-stock scenario - derived stock check fires LowStockEvent
- *   F. Maintenance mode - all purchases blocked, HardwareFailureEvent fired
- *   G. Composite bundle price calculated across pricing strategies
- * =============================================================================
- */
-
+#include <iomanip>
 #include <iostream>
+#include <memory>
+#include <string>
+#include <thread>
+#include <atomic>
+#include <vector>
 using namespace std;
 
-// Infrastructure
 #include "core/CentralRegistry.h"
-
-// Observer Pattern
-#include "observer/EventManager.h"
-#include "observer/Subscribers.h"
-
-// Inventory
-#include "inventory/ReservationManager.h"
-#include "inventory/InventoryManager.h"
-
-// State Pattern
-#include "state/ActiveState.h"
-#include "state/PowerSavingState.h"
-#include "state/EmergencyState.h"
-#include "state/MaintenanceState.h"
-
-// Kiosk (State context)
-#include "core/Kiosk.h"
-
-// Product (Composite + Strategy)
-#include "product/IndividualProduct.h"
-#include "product/ProductBundle.h"
-#include "pricing/StandardPricing.h"
+#include "factory/EmergencyReliefKioskFactory.h"
+#include "factory/FoodKioskFactory.h"
+#include "factory/PharmacyKioskFactory.h"
+#include "persistence/ConfigRepository.h"
+#include "persistence/TransactionRepository.h"
 #include "pricing/DiscountPricing.h"
 #include "pricing/EmergencyPricing.h"
+#include "pricing/StandardPricing.h"
+#include "product/IndividualProduct.h"
+#include "product/ProductBundle.h"
 
-// ─────────────────────────────────────────────────────────────
+namespace
+{
+const string DATA_DIR = "data/";
+
 void printSeparator(const string &title)
 {
-    cout << "\n=============================================" << endl;
-    cout << "  " << title << endl;
-    cout << "=============================================" << endl;
+    cout << "\n============================================================" << endl;
+    cout << title << endl;
+    cout << "============================================================" << endl;
 }
-// ─────────────────────────────────────────────────────────────
+
+void printInventory(KioskRuntime &runtime)
+{
+    cout << "Inventory snapshot for " << runtime.kioskType << ":" << endl;
+    for (const string &itemId : runtime.productCatalog->getItemIds())
+    {
+        cout << "  - " << setw(12) << left << itemId
+             << " stock=" << runtime.inventoryManager->getDerivedStock(itemId)
+             << " price=Rs." << runtime.productCatalog->getBasePrice(itemId)
+             << endl;
+    }
+}
+
+void printFactorySummary(KioskRuntime &runtime, const string &factoryName)
+{
+    cout << factoryName << " created " << runtime.kioskType
+         << " (" << runtime.kioskId << ")" << endl;
+    cout << "  Policy      : " << runtime.inventoryPolicy->getPolicyName() << endl;
+    cout << "  Diagnostics : " << runtime.diagnosticsService->buildReport() << endl;
+    printInventory(runtime);
+}
+
+void saveSystemConfig(const ConfigRepository &repository)
+{
+    repository.save(CentralRegistry::getInstance());
+}
+}
 
 int main()
 {
-    cout << "=============================================" << endl;
-    cout << "       AURA RETAIL OS - SUBTASK 2 DEMO         " << endl;
-    cout << "  PATH A: Adaptive Autonomous System           " << endl;
-    cout << "  Group 5: Lazy Constructors                   " << endl;
-    cout << "=============================================" << endl;
+    cout << "============================================================" << endl;
+    cout << "AURA RETAIL OS - FINAL PATH A DEMONSTRATION" << endl;
+    cout << "Adaptive Autonomous System | Group 5" << endl;
+    cout << "============================================================" << endl;
 
-    // =========================================================
-    // SINGLETON: CentralRegistry - verify single instance
-    // =========================================================
-    printSeparator("PATTERN: Singleton - CentralRegistry");
+    ConfigRepository configRepository(DATA_DIR + "config.csv");
+    configRepository.load(CentralRegistry::getInstance());
 
-    CentralRegistry *reg1 = CentralRegistry::getInstance();
-    CentralRegistry *reg2 = CentralRegistry::getInstance();
+    printSeparator("1. ABSTRACT FACTORY BOOTSTRAP");
 
-    cout << "reg1 address: " << reg1 << endl;
-    cout << "reg2 address: " << reg2 << endl;
-    cout << "Same instance: " << (reg1 == reg2 ? "YES " : "NO ") << endl;
-    cout << "System mode  : " << reg1->getConfig("system_mode") << endl;
-    cout << "Kiosk version: " << reg1->getConfig("kiosk_version") << endl;
+    PharmacyKioskFactory pharmacyFactory;
+    FoodKioskFactory foodFactory;
+    EmergencyReliefKioskFactory emergencyFactory;
 
-    // =========================================================
-    // OBSERVER: Wire up EventManager with subscribers
-    // =========================================================
-    printSeparator("PATTERN: Observer - EventManager Setup");
+    KioskRuntime pharmacy = pharmacyFactory.create("PHARM-01",
+                                                   DATA_DIR + "pharmacy_inventory.csv",
+                                                   DATA_DIR + "pharmacy_transactions.csv");
+    KioskRuntime food = foodFactory.create("FOOD-01",
+                                           DATA_DIR + "food_inventory.csv",
+                                           DATA_DIR + "food_transactions.csv");
+    KioskRuntime emergency = emergencyFactory.create("ER-01",
+                                                     DATA_DIR + "emergency_inventory.csv",
+                                                     DATA_DIR + "emergency_transactions.csv");
 
-    EventManager eventManager;
-    InventoryMonitor    invMonitor;
-    CityMonitoringCenter cityMonitor;
-    MaintenanceService  maintService;
+    printFactorySummary(pharmacy, pharmacyFactory.getFactoryName());
+    printFactorySummary(food, foodFactory.getFactoryName());
+    printFactorySummary(emergency, emergencyFactory.getFactoryName());
 
-    // Subscribe each observer to relevant event types
-    eventManager.subscribe("LowStockEvent",          &invMonitor);
-    eventManager.subscribe("TransactionCompleted",   &invMonitor);
-    eventManager.subscribe("EmergencyModeActivated", &cityMonitor);
-    eventManager.subscribe("HardwareFailureEvent",   &cityMonitor);
-    eventManager.subscribe("HardwareFailureEvent",   &maintService);
-    eventManager.subscribe("TransactionCompleted",   &cityMonitor);
-    eventManager.subscribe("PurchaseDenied",         &cityMonitor);
+    printSeparator("2. PHARMACY COMPATIBILITY CHECK");
+    cout << "Attempt: buy refrigerated insulin from pharmacy kiosk" << endl;
+    pharmacy.kioskInterface->purchaseItem("insulin", 1, "CARD");
 
-    cout << "Subscribers registered:" << endl;
-    cout << "  InventoryMonitor     -> LowStockEvent, TransactionCompleted" << endl;
-    cout << "  CityMonitoringCenter -> EmergencyModeActivated, HardwareFailureEvent, TransactionCompleted, PurchaseDenied" << endl;
-    cout << "  MaintenanceService   -> HardwareFailureEvent" << endl;
+    printSeparator("3. FOOD KIOSK QUICK FLOW");
+    cout << "Attempt: buy 2x snack from food kiosk" << endl;
+    food.kioskInterface->purchaseItem("snack", 2, "UPI");
+    cout << "Attempt: restock 3x food" << endl;
+    food.kioskInterface->restockInventory("food", 3);
+    food.kioskInterface->runDiagnostics();
 
-    // =========================================================
-    // INVENTORY: Setup with ReservationManager composition
-    // =========================================================
-    printSeparator("Inventory Initialization");
+    printSeparator("4. EMERGENCY RELIEF - PATH A CORE SCENARIOS");
+    emergency.kioskInterface->runDiagnostics();
 
-    ReservationManager reservation;
-    InventoryManager   inventory(&reservation);   // composed - derived stock = raw - reserved
+    cout << "\nScenario A: Normal purchase in ACTIVE mode" << endl;
+    emergency.kioskInterface->purchaseItem("water", 2, "UPI");
 
-    inventory.addStock("water",     10);
-    inventory.addStock("food",       5);
-    inventory.addStock("medkit",     3);
-    inventory.addStock("battery",    2);
+    cout << "\nScenario B: POWER_SAVING mode with discounted pricing" << endl;
+    emergency.kiosk->transitionState(emergency.powerSavingState.get());
+    CentralRegistry::getInstance()->setConfig("system_mode", "POWER_SAVING");
+    saveSystemConfig(configRepository);
+    emergency.kioskInterface->purchaseItem("food", 2, "CARD");
 
-    cout << "Stock initialized:" << endl;
-    cout << "  water  : " << inventory.getDerivedStock("water")   << " units" << endl;
-    cout << "  food   : " << inventory.getDerivedStock("food")    << " units" << endl;
-    cout << "  medkit : " << inventory.getDerivedStock("medkit")  << " units" << endl;
-    cout << "  battery: " << inventory.getDerivedStock("battery") << " units" << endl;
+    cout << "\nScenario C: EMERGENCY mode with quantity cap and emergency pricing" << endl;
+    emergency.kiosk->transitionState(emergency.emergencyState.get());
+    CentralRegistry::getInstance()->setConfig("system_mode", "EMERGENCY");
+    saveSystemConfig(configRepository);
+    emergency.kioskInterface->purchaseItem("medkit", 1, "WALLET");
 
-    // =========================================================
-    // STATE: Create state objects
-    // =========================================================
-    ActiveState      activeState;
-    PowerSavingState powerSavingState;
-    EmergencyState   emergencyState;
-    MaintenanceState maintenanceState;
+    cout << "\nScenario D: Emergency over-limit purchase denied" << endl;
+    emergency.kioskInterface->purchaseItem("food", 3, "UPI");
 
-    // =========================================================
-    // KIOSK: Start in ActiveState
-    // =========================================================
-    printSeparator("Kiosk Created - ActiveState");
+    cout << "\nScenario E: Low-stock warning after battery purchase" << endl;
+    emergency.kioskInterface->purchaseItem("battery", 2, "CARD");
 
-    Kiosk kiosk("KIOSK-01", &activeState, &eventManager, &inventory, &reservation);
+    cout << "\nScenario F: Recoverable hardware fault resolved by recovery chain" << endl;
+    emergency.kioskInterface->purchaseItem("water", 1, "CARD", "RECOVERABLE");
 
-    // =========================================================
-    // SCENARIO A: Normal purchase in Active mode
-    // =========================================================
-    printSeparator("SCENARIO A: Normal Purchase (Active Mode)");
-    cout << "Attempt: buy 2x water at standard price (base Rs.100 -> Rs.100 each)" << endl;
-    kiosk.processUserRequest("water", 2);
+    cout << "\nScenario G: Delayed hardware response times out and rolls back" << endl;
+    emergency.kioskInterface->purchaseItem("water", 1, "CARD", "NONE", false, 1500, 500);
 
-    cout << "\nAttempt: buy 1x food" << endl;
-    kiosk.processUserRequest("food", 1);
+    cout << "\nScenario H: Fatal hardware fault triggers refund and rollback" << endl;
+    emergency.kioskInterface->purchaseItem("battery", 1, "WALLET", "FATAL");
 
-    // =========================================================
-    // SCENARIO B: Transition to PowerSaving - discount pricing
-    // =========================================================
-    printSeparator("SCENARIO B: Power-Saving Mode (Discount Pricing)");
-    kiosk.transitionState(&powerSavingState);
-    reg1->setConfig("system_mode", "POWER_SAVING");
+    cout << "\nScenario I: Simulated payment failure rolls back cleanly" << endl;
+    emergency.kioskInterface->purchaseItem("food", 1, "UPI", "NONE", true);
 
-    cout << "\nAttempt: buy 2x water (should be allowed, 20% discount)" << endl;
-    kiosk.processUserRequest("water", 2);
+    cout << "\nScenario J: Concurrent purchases cannot oversell reserved stock" << endl;
+    emergency.inventoryManager->setRawStock("battery", 2);
+    emergency.reservationManager->setReserved("battery", 0);
+    atomic<int> successfulConcurrentPurchases {0};
+    auto concurrentPurchase = [&]()
+    {
+        if (emergency.kioskInterface->purchaseItem("battery", 2, "CARD"))
+            ++successfulConcurrentPurchases;
+    };
+    thread userOne(concurrentPurchase);
+    thread userTwo(concurrentPurchase);
+    userOne.join();
+    userTwo.join();
+    cout << "Concurrent purchase success count: "
+         << successfulConcurrentPurchases.load()
+         << " | Remaining derived stock: "
+         << emergency.inventoryManager->getDerivedStock("battery") << endl;
 
-    cout << "\nAttempt: buy 5x water (exceeds PowerSaving limit of 3 - should be denied)" << endl;
-    kiosk.processUserRequest("water", 5);
+    cout << "\nScenario K: Priority event processing handles emergency first" << endl;
+    emergency.eventManager->queueEvent("TransactionCompleted", "Routine sale completed.");
+    emergency.eventManager->queueEvent("LowStockEvent", "Water is near threshold.");
+    emergency.eventManager->queueEvent("EmergencyModeActivated", "City flood alert received.");
+    emergency.eventManager->processQueuedEvents();
 
-    // =========================================================
-    // SCENARIO C: Emergency mode activated - event broadcast
-    // =========================================================
-    printSeparator("SCENARIO C: Emergency Mode Activated");
-    kiosk.transitionState(&emergencyState);
-    reg1->setConfig("system_mode", "EMERGENCY");
+    cout << "\nScenario L: MAINTENANCE mode blocks purchases" << endl;
+    emergency.kiosk->transitionState(emergency.maintenanceState.get());
+    CentralRegistry::getInstance()->setConfig("system_mode", "MAINTENANCE");
+    saveSystemConfig(configRepository);
+    emergency.kioskInterface->purchaseItem("water", 1, "UPI");
 
-    cout << "\nAttempt: buy 1x medkit at emergency price (base Rs.100 -> Rs.50)" << endl;
-    kiosk.processUserRequest("medkit", 1);
+    cout << "\nScenario M: Admin commands in maintenance mode" << endl;
+    emergency.kioskInterface->restockInventory("battery", 3);
+    emergency.kioskInterface->refundTransaction("water", 1);
+    emergency.kioskInterface->runDiagnostics();
 
-    // =========================================================
-    // SCENARIO D: Over-limit purchase in Emergency mode
-    // =========================================================
-    printSeparator("SCENARIO D: Emergency Limit Enforcement");
-    cout << "Attempt: buy 3x food (exceeds emergency limit of 2 - should be denied)" << endl;
-    kiosk.processUserRequest("food", 3);
+    printSeparator("5. COMPOSITE + STRATEGY PRICE DEMO");
+    StandardPricing standardPricing;
+    DiscountPricing discountPricing;
+    EmergencyPricing emergencyPricing;
 
-    cout << "\nAttempt: buy 2x food (within emergency limit - should be allowed)" << endl;
-    kiosk.processUserRequest("food", 2);
+    IndividualProduct waterPack(emergency.productCatalog->getBasePrice("water"), &standardPricing);
+    IndividualProduct rationPack(emergency.productCatalog->getBasePrice("food"), &discountPricing);
+    IndividualProduct medicalPack(emergency.productCatalog->getBasePrice("medkit"), &emergencyPricing);
 
-    // =========================================================
-    // SCENARIO E: LowStockEvent fires automatically
-    // =========================================================
-    printSeparator("SCENARIO E: Low Stock Detection & Event");
-    cout << "Current battery stock: " << inventory.getDerivedStock("battery") << endl;
-    cout << "Attempt: buy 1x battery (stock will hit threshold, firing LowStockEvent)" << endl;
-    kiosk.processUserRequest("battery", 1);
+    ProductBundle basicReliefKit;
+    basicReliefKit.add(&waterPack);
+    basicReliefKit.add(&rationPack);
 
-    // =========================================================
-    // SCENARIO F: Maintenance mode - all purchases blocked
-    // =========================================================
-    printSeparator("SCENARIO F: Maintenance Mode - All Purchases Blocked");
-    kiosk.transitionState(&maintenanceState);
-    reg1->setConfig("system_mode", "MAINTENANCE");
+    ProductBundle cityResponseKit;
+    cityResponseKit.add(&basicReliefKit);
+    cityResponseKit.add(&medicalPack);
 
-    cout << "\nAttempt: buy 1x water (should be blocked in maintenance mode)" << endl;
-    kiosk.processUserRequest("water", 1);
+    cout << "Basic relief kit final price  : Rs." << basicReliefKit.calculateFinalPrice() << endl;
+    cout << "City response kit final price : Rs." << cityResponseKit.calculateFinalPrice() << endl;
 
-    // =========================================================
-    // SCENARIO G: Composite Pattern - Bundle price calculation
-    // =========================================================
-    printSeparator("SCENARIO G: Composite Pattern - Product Bundles");
+    printSeparator("6. PERSISTENCE CHECK");
+    vector<string> auditRows = TransactionRepository(DATA_DIR + "emergency_transactions.csv").loadAll();
+    cout << "Persisted emergency transaction rows: " << auditRows.size() << endl;
+    cout << "Current registry mode saved as: "
+         << CentralRegistry::getInstance()->getConfig("system_mode") << endl;
 
-    StandardPricing stdPricing;
-    DiscountPricing discPricing;
-    EmergencyPricing emgPricing;
-
-    // Individual products with different strategies
-    IndividualProduct p1(50.0f,  &stdPricing);   // ₹50  standard
-    IndividualProduct p2(100.0f, &discPricing);  // ₹80  (20% off)
-    IndividualProduct p3(200.0f, &emgPricing);   // ₹100 (50% off)
-
-    // Simple bundle
-    ProductBundle basicKit;
-    basicKit.add(&p1);
-    basicKit.add(&p2);
-    cout << "BasicKit (p1 standard + p2 discount): Rs."
-         << basicKit.calculateFinalPrice() << endl;
-
-    // Nested bundle - bundle inside a bundle
-    ProductBundle emergencyKit;
-    emergencyKit.add(&basicKit);  // nested bundle
-    emergencyKit.add(&p3);
-    cout << "EmergencyKit (basicKit + p3 emergency): Rs."
-         << emergencyKit.calculateFinalPrice() << endl;
-    cout << "  (Demonstrates Composite: nested bundle calculated recursively)" << endl;
-
-    // =========================================================
-    // FINAL SUMMARY
-    // =========================================================
-    printSeparator("SIMULATION COMPLETE");
-    cout << "Patterns demonstrated:" << endl;
-    cout << "  State Pattern    - 4 states: Active, PowerSaving, Emergency, Maintenance" << endl;
-    cout << "  Observer Pattern - EventManager + 3 subscribers, 6 event types" << endl;
-    cout << "  Strategy Pattern - Pricing switches automatically with state" << endl;
-    cout << "  Composite Pattern- Nested bundles, recursive price calculation" << endl;
-    cout << "  Singleton Pattern- CentralRegistry, same instance verified" << endl;
-    cout << "\nPath A Requirements met:" << endl;
-    cout << "  Dynamic pricing switches at runtime" << endl;
-    cout << "  Kiosk operational modes (4 states)" << endl;
-    cout << "  Emergency purchase limits enforced" << endl;
-    cout << "  Derived stock = raw stock - reservations" << endl;
-    cout << "  Event-driven communication (zero direct subsystem coupling)" << endl;
-    cout << "  LowStockEvent fired automatically on threshold breach" << endl;
-    cout << "  EmergencyModeActivated overrides operations immediately" << endl;
+    printSeparator("7. FINAL STATUS");
+    cout << "Project now demonstrates:" << endl;
+    cout << "  * Abstract Factory for kiosk creation" << endl;
+    cout << "  * Facade + RuleEngine + Command transaction flow" << endl;
+    cout << "  * Memento rollback, payment adapters, and recovery chain" << endl;
+    cout << "  * State-driven pricing and operational restrictions" << endl;
+    cout << "  * Thread-safe reservations for concurrent transaction protection" << endl;
+    cout << "  * Delayed hardware timeout handling with rollback" << endl;
+    cout << "  * Priority Observer events for emergency overrides" << endl;
+    cout << "  * Composite product bundles" << endl;
+    cout << "  * CSV persistence for config, inventory, and transactions" << endl;
 
     return 0;
 }
