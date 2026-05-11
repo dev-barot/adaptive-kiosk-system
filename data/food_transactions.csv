@@ -11,3 +11,49 @@ timestamp,transaction_id,operation,status,item_id,quantity,amount,payment_method
 2026-04-27 18:39:20,N/A,TransactionManager,INFO,,0,0.00,,,,Restock requested -> Item: food Qty: 3
 2026-04-27 18:39:20,N/A,Restock,SUCCESS,,0,0.00,,,,Item=food Qty=3
 2026-04-27 18:39:20,N/A,TransactionManager,INFO,,0,0.00,,,,Restock completed -> Item: food | New stock: 14
+2026-05-11 23:40:33,N/A,TransactionManager,INFO,,0,0.00,,,,Purchase requested -> TXN-2 Item: snack Qty: 2 Payment: UPI
+2026-05-11 23:40:33,TXN-2,Purchase,STARTED,snack,2,0.00,UPI,REQUESTED,,Purchase request accepted by facade
+2026-05-11 23:40:33,TXN-2,Purchase,PASSED,snack,2,0.00,UPI,VALIDATED,,All static and derived constraints passed
+2026-05-11 23:40:33,N/A,TransactionManager,INFO,,0,0.00,,,,Snapshot saved before payment and dispense -> Item: snack
+2026-05-11 23:40:33,TXN-2,Purchase,SAVED,snack,2,0.00,UPI,SNAPSHOT_SAVED,,Rollback point captured
+2026-05-11 23:40:33,TXN-2,Purchase,PASSED,snack,2,170.00,UPI,RESERVED,,Stock reserved atomically
+2026-05-11 23:40:33,TXN-2,Purchase,PASSED,snack,2,170.00,UPI,PAYMENT_CONFIRMED,,Payment adapter approved charge
+2026-05-11 23:40:33,TXN-2,Purchase,SUCCESS,snack,2,170.00,UPI,COMMITTED,,Inventory reduced and transaction completed atomically
+2026-05-11 23:40:34,N/A,TransactionManager,INFO,,0,0.00,,,,Purchase completed -> SUCCESS | Item: snack
+2026-05-11 23:40:34,N/A,TransactionManager,INFO,,0,0.00,,,,Restock requested -> Item: food Qty: 3
+2026-05-11 23:40:34,N/A,Restock,SUCCESS,,0,0.00,,,,Item=food Qty=3
+2026-05-11 23:40:34,N/A,TransactionManager,INFO,,0,0.00,,,,Restock completed -> Item: food | New stock: 17
+2026-05-11 23:48:47,N/A,TransactionManager,INFO,,0,0.00,,,,Purchase requested -> TXN-1 Item: 1 Qty: 2 Payment: CARD
+2026-05-11 23:48:47,TXN-1,Purchase,STARTED,1,2,0.00,CARD,REQUESTED,,Purchase request accepted by facade
+2026-05-11 23:48:47,TXN-1,Purchase,FAILED,1,2,0.00,CARD,VALIDATION_FAILED,RuleEngine rejected request,No payment or inventory mutation performed
+2026-05-11 23:48:47,N/A,TransactionManager,INFO,,0,0.00,,,,Purchase rejected by RuleEngine -> Item: 1
+2026-05-11 23:51:28,N/A,TransactionManager,INFO,,0,0.00,,,,Purchase requested -> TXN-1 Item: food Qty: 1 Payment: CARD
+2026-05-11 23:51:28,TXN-1,Purchase,STARTED,food,1,0.00,CARD,REQUESTED,,Purchase request accepted by facade
+2026-05-11 23:51:28,TXN-1,Purchase,PASSED,food,1,0.00,CARD,VALIDATED,,All static and derived constraints passed
+2026-05-11 23:51:28,N/A,TransactionManager,INFO,,0,0.00,,,,Snapshot saved before payment and dispense -> Item: food
+2026-05-11 23:51:28,TXN-1,Purchase,SAVED,food,1,0.00,CARD,SNAPSHOT_SAVED,,Rollback point captured
+2026-05-11 23:51:28,TXN-1,Purchase,PASSED,food,1,120.00,CARD,RESERVED,,Stock reserved atomically
+2026-05-11 23:51:28,TXN-1,Purchase,PASSED,food,1,120.00,CARD,PAYMENT_CONFIRMED,,Payment adapter approved charge
+2026-05-11 23:51:28,TXN-1,Purchase,SUCCESS,food,1,120.00,CARD,COMMITTED,,Inventory reduced and transaction completed atomically
+2026-05-11 23:51:28,N/A,TransactionManager,INFO,,0,0.00,,,,Purchase completed -> SUCCESS | Item: food
+2026-05-11 23:52:32,N/A,TransactionManager,INFO,,0,0.00,,,,Purchase requested -> TXN-1 Item: water Qty: 4 Payment: CARD
+2026-05-11 23:52:32,TXN-1,Purchase,STARTED,water,4,0.00,CARD,REQUESTED,,Purchase request accepted by facade
+2026-05-11 23:52:32,TXN-1,Purchase,PASSED,water,4,0.00,CARD,VALIDATED,,All static and derived constraints passed
+2026-05-11 23:52:32,N/A,TransactionManager,INFO,,0,0.00,,,,Snapshot saved before payment and dispense -> Item: water
+2026-05-11 23:52:32,TXN-1,Purchase,SAVED,water,4,0.00,CARD,SNAPSHOT_SAVED,,Rollback point captured
+2026-05-11 23:52:32,TXN-1,Purchase,PASSED,water,4,160.00,CARD,RESERVED,,Stock reserved atomically
+2026-05-11 23:52:32,TXN-1,Purchase,PASSED,water,4,160.00,CARD,PAYMENT_CONFIRMED,,Payment adapter approved charge
+2026-05-11 23:52:32,TXN-1,Purchase,SUCCESS,water,4,160.00,CARD,COMMITTED,,Inventory reduced and transaction completed atomically
+2026-05-11 23:52:32,N/A,TransactionManager,INFO,,0,0.00,,,,Purchase completed -> SUCCESS | Item: water
+2026-05-11 23:53:34,N/A,TransactionManager,INFO,,0,0.00,,,,Purchase requested -> TXN-3 Item: snack Qty: 2 Payment: UPI
+2026-05-11 23:53:34,TXN-3,Purchase,STARTED,snack,2,0.00,UPI,REQUESTED,,Purchase request accepted by facade
+2026-05-11 23:53:34,TXN-3,Purchase,PASSED,snack,2,0.00,UPI,VALIDATED,,All static and derived constraints passed
+2026-05-11 23:53:34,N/A,TransactionManager,INFO,,0,0.00,,,,Snapshot saved before payment and dispense -> Item: snack
+2026-05-11 23:53:34,TXN-3,Purchase,SAVED,snack,2,0.00,UPI,SNAPSHOT_SAVED,,Rollback point captured
+2026-05-11 23:53:34,TXN-3,Purchase,PASSED,snack,2,170.00,UPI,RESERVED,,Stock reserved atomically
+2026-05-11 23:53:35,TXN-3,Purchase,PASSED,snack,2,170.00,UPI,PAYMENT_CONFIRMED,,Payment adapter approved charge
+2026-05-11 23:53:35,TXN-3,Purchase,SUCCESS,snack,2,170.00,UPI,COMMITTED,,Inventory reduced and transaction completed atomically
+2026-05-11 23:53:35,N/A,TransactionManager,INFO,,0,0.00,,,,Purchase completed -> SUCCESS | Item: snack
+2026-05-11 23:53:35,N/A,TransactionManager,INFO,,0,0.00,,,,Restock requested -> Item: food Qty: 3
+2026-05-11 23:53:35,N/A,Restock,SUCCESS,,0,0.00,,,,Item=food Qty=3
+2026-05-11 23:53:35,N/A,TransactionManager,INFO,,0,0.00,,,,Restock completed -> Item: food | New stock: 19

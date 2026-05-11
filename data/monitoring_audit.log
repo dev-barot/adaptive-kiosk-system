@@ -24,3 +24,56 @@
 [Mon Apr 27 18:39:25 2026] [TransactionCompleted] Routine sale completed.
 [Mon Apr 27 18:39:25 2026] [HardwareFailureEvent] Kiosk ER-01 entered Maintenance mode.
 [Mon Apr 27 18:39:26 2026] [PurchaseDenied] Item: water Qty: 1 Reason: State restriction in MAINTENANCE
+[Mon May 11 23:40:33 2026] [TransactionCompleted] Item: insulin Qty: 1 Total: 340.000000
+[Mon May 11 23:40:33 2026] [TransactionCompleted] Item: snack Qty: 2 Total: 170.000000
+[Mon May 11 23:40:34 2026] [TransactionCompleted] Item: water Qty: 2 Total: 100.000000
+[Mon May 11 23:40:34 2026] [TransactionCompleted] Item: food Qty: 2 Total: 176.000000
+[Mon May 11 23:40:34 2026] [EmergencyModeActivated] Kiosk ER-01 entered Emergency Lockdown.
+[Mon May 11 23:40:35 2026] [TransactionCompleted] Item: medkit Qty: 1 Total: 90.000000
+[Mon May 11 23:40:35 2026] [PurchaseDenied] Item: food Qty: 3 Reason: State restriction in EMERGENCY
+[Mon May 11 23:40:35 2026] [TransactionCompleted] Item: battery Qty: 2 Total: 75.000000
+[Mon May 11 23:40:36 2026] [HardwareFailureEvent] Dispense failure while processing 'water'.
+[Mon May 11 23:40:36 2026] [RecoverySucceeded] Automatic recovery completed for 'water'.
+[Mon May 11 23:40:36 2026] [TransactionCompleted] Item: water Qty: 1 Total: 25.000000
+[Mon May 11 23:40:38 2026] [HardwareFailureEvent] Dispense failure while processing 'water'.
+[Mon May 11 23:40:38 2026] [TechnicianAlert] Manual intervention required for 'water' x1
+[Mon May 11 23:40:38 2026] [PaymentRolledBack] Refund issued for failed purchase of 'water'.
+[Mon May 11 23:40:38 2026] [RecoveryFailed] Automatic recovery failed for 'water'.
+[Mon May 11 23:40:38 2026] [HardwareFailureEvent] Dispense failure while processing 'battery'.
+[Mon May 11 23:40:38 2026] [TechnicianAlert] Manual intervention required for 'battery' x1
+[Mon May 11 23:40:38 2026] [PaymentRolledBack] Refund issued for failed purchase of 'battery'.
+[Mon May 11 23:40:38 2026] [RecoveryFailed] Automatic recovery failed for 'battery'.
+[Mon May 11 23:40:39 2026] [PaymentFailed] Payment failed for 'food' using UPI
+[Mon May 11 23:40:39 2026] [PurchaseDenied] Item: battery - insufficient stock (0 available)
+[Mon May 11 23:40:39 2026] [TransactionCompleted] Item: battery Qty: 2 Total: 75.000000
+[Mon May 11 23:40:39 2026] [EmergencyModeActivated] City flood alert received.
+[Mon May 11 23:40:39 2026] [TransactionCompleted] Routine sale completed.
+[Mon May 11 23:40:39 2026] [HardwareFailureEvent] Kiosk ER-01 entered Maintenance mode.
+[Mon May 11 23:40:39 2026] [PurchaseDenied] Item: water Qty: 1 Reason: State restriction in MAINTENANCE
+[Mon May 11 23:51:28 2026] [TransactionCompleted] Item: food Qty: 1 Total: 120.000000
+[Mon May 11 23:52:32 2026] [TransactionCompleted] Item: water Qty: 4 Total: 160.000000
+[Mon May 11 23:53:34 2026] [TransactionCompleted] Item: insulin Qty: 1 Total: 340.000000
+[Mon May 11 23:53:35 2026] [TransactionCompleted] Item: snack Qty: 2 Total: 170.000000
+[Mon May 11 23:53:35 2026] [TransactionCompleted] Item: water Qty: 2 Total: 100.000000
+[Mon May 11 23:53:36 2026] [TransactionCompleted] Item: food Qty: 2 Total: 176.000000
+[Mon May 11 23:53:36 2026] [EmergencyModeActivated] Kiosk ER-01 entered Emergency Lockdown.
+[Mon May 11 23:53:36 2026] [TransactionCompleted] Item: medkit Qty: 1 Total: 90.000000
+[Mon May 11 23:53:37 2026] [TransactionCompleted] Item: battery Qty: 2 Total: 75.000000
+[Mon May 11 23:53:37 2026] [HardwareFailureEvent] Dispense failure while processing 'water'.
+[Mon May 11 23:53:37 2026] [RecoverySucceeded] Automatic recovery completed for 'water'.
+[Mon May 11 23:53:37 2026] [TransactionCompleted] Item: water Qty: 1 Total: 25.000000
+[Mon May 11 23:53:39 2026] [HardwareFailureEvent] Dispense failure while processing 'water'.
+[Mon May 11 23:53:39 2026] [TechnicianAlert] Manual intervention required for 'water' x1
+[Mon May 11 23:53:39 2026] [PaymentRolledBack] Refund issued for failed purchase of 'water'.
+[Mon May 11 23:53:39 2026] [RecoveryFailed] Automatic recovery failed for 'water'.
+[Mon May 11 23:53:40 2026] [HardwareFailureEvent] Dispense failure while processing 'battery'.
+[Mon May 11 23:53:40 2026] [TechnicianAlert] Manual intervention required for 'battery' x1
+[Mon May 11 23:53:40 2026] [PaymentRolledBack] Refund issued for failed purchase of 'battery'.
+[Mon May 11 23:53:40 2026] [RecoveryFailed] Automatic recovery failed for 'battery'.
+[Mon May 11 23:53:40 2026] [PaymentFailed] Payment failed for 'food' using UPI
+[Mon May 11 23:53:41 2026] [PurchaseDenied] Item: battery - insufficient stock (0 available)
+[Mon May 11 23:53:41 2026] [TransactionCompleted] Item: battery Qty: 2 Total: 75.000000
+[Mon May 11 23:53:41 2026] [EmergencyModeActivated] City flood alert received.
+[Mon May 11 23:53:41 2026] [TransactionCompleted] Routine sale completed.
+[Mon May 11 23:53:41 2026] [HardwareFailureEvent] Kiosk ER-01 entered Maintenance mode.
+[Mon May 11 23:53:41 2026] [PurchaseDenied] Item: water Qty: 1 Reason: State restriction in MAINTENANCE
